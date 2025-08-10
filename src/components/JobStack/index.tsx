@@ -114,7 +114,7 @@ const JobStack: React.FC<JobStackProps> = ({ onSwipeAction }) => {
 	}
 
 	return (
-		<div className="relative w-full h-full overflow-hidden">
+		<div className="relative w-full h-full overflow-hidden bg-transparent">
 			<AnimatePresence mode="wait">
 				{currentJob && (
 					<motion.div

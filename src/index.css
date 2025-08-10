@@ -35,6 +35,8 @@ body {
   -webkit-overflow-scrolling: touch;
   /* Prevent zoom on iOS */
   touch-action: pan-y;
+  /* Ensure white background */
+  background-color: #f3f4f6;
 }
 
 #root {
@@ -56,11 +58,26 @@ body {
   position: relative;
 }
 
+/* Prevent keyboard from pushing up the chat view */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari */
+  .fixed {
+    position: fixed !important;
+  }
+  
+  /* Prevent viewport manipulation on input focus */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    font-size: 16px !important;
+  }
+}
+
 /* Safe area for iOS devices */
 @supports (padding: max(0px)) {
   .app-container {
     padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
+    /* Removed padding-bottom to avoid covering content */
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
   }

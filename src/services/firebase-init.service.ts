@@ -126,7 +126,7 @@ export class FirebaseInitService {
 				console.log('📄 Job document:', doc.id, data)
 				
 				// Convert Timestamp fields to serializable values
-				const jobData = {
+				const jobData: any = {
 					id: doc.id,
 					...data
 				}

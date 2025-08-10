@@ -57,14 +57,14 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSwipeLeft, onSwipeRight, onTap
 
 	return (
 		<div
-			className="absolute inset-0 w-full h-full overflow-hidden"
+			className="absolute inset-0 w-full h-full overflow-hidden bg-transparent"
 			style={{
 				userSelect: 'none',
 				touchAction: 'none'
 			}}
 		>
 			<motion.div
-				className="w-full h-full relative overflow-hidden"
+				className="w-full h-full relative overflow-hidden bg-transparent rounded-lg"
 				style={{ opacity }}
 				animate={{
 					x: swipeDistance,
@@ -84,7 +84,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSwipeLeft, onSwipeRight, onTap
 				}}
 			>
 				{/* Background Image - covers entire card */}
-				<div className="absolute inset-0 w-full h-full overflow-hidden">
+				<div className="absolute inset-0 w-full h-full overflow-hidden rounded-lg">
 					<img
 						src={job.image}
 						alt={job.title}
@@ -92,9 +92,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSwipeLeft, onSwipeRight, onTap
 						onError={handleImageError}
 					/>
 					{/* Enhanced gradient overlay for better text readability */}
-					<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-					{/* Additional central overlay for text area */}
-					<div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 to-transparent"></div>
+					<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
 				</div>
 
 				{/* Swipe Indicators */}
@@ -154,7 +152,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSwipeLeft, onSwipeRight, onTap
 				</div>
 
 				{/* Job Details - Center-bottom positioning */}
-				<div className="absolute inset-x-0 bottom-16 top-1/2 flex flex-col justify-end px-6 py-6 text-white">
+				<div className="absolute inset-x-0 bottom-0 flex flex-col justify-end px-6 pb-8 text-white" style={{ paddingBottom: 'calc(2rem + env(safe-area-inset-bottom))' }}>
 					{/* Title and Company */}
 					<div className="mb-4">
 						<h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 leading-tight line-clamp-2 drop-shadow-lg">
@@ -198,7 +196,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSwipeLeft, onSwipeRight, onTap
 					</p>
 
 					{/* Tags - better spacing and visibility */}
-					<div className="flex flex-wrap gap-2 overflow-hidden" style={{ maxHeight: '3rem' }}>
+					<div className="flex flex-wrap gap-2">
 						{job.tags.slice(0, window.innerWidth < 640 ? 2 : 4).map((tag: string, index: number) => (
 							<span
 								key={index}
@@ -226,9 +224,9 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSwipeLeft, onSwipeRight, onTap
 						console.log('AI button clicked') // Debug log
 						onAskQuestion()
 					}}
-					className="absolute bottom-4 right-4 w-12 h-12 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-full flex items-center justify-center transition-all duration-200 shadow-lg z-30"
+					className="absolute bottom-4 right-4 w-14 h-14 bg-white/90 backdrop-blur-md hover:bg-white hover:scale-110 rounded-full flex items-center justify-center transition-all duration-200 shadow-xl border-2 border-white/50 z-30 group"
 				>
-					<AIIcon className="w-6 h-6" />
+					<AIIcon className="w-7 h-7 text-blue-600 group-hover:text-blue-700 transition-all duration-200" />
 				</button>
 			)}
 		</div>
