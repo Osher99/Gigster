@@ -21,7 +21,7 @@ const OnboardingSummary: React.FC<OnboardingSummaryProps> = ({
 	}
 
 	return (
-		<div className="p-4 border-t border-gray-100 bg-gray-50">
+		<div className="p-4 border-t border-gray-100 bg-gray-50" style={{ flexShrink: 0 }}>
 			<h4 className="text-sm font-medium text-gray-700 mb-3">Application Details</h4>
 			<div className="space-y-2">
 				{/* Name */}

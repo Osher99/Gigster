@@ -12,7 +12,19 @@ interface MessageListProps {
 
 const MessageList: React.FC<MessageListProps> = ({ messages, isLoading, messagesEndRef }) => {
 	return (
-		<div className="flex-1 overflow-y-auto p-4 space-y-4 pb-20" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}>
+		<div 
+			className="overflow-y-auto p-4 space-y-4" 
+			style={{ 
+				WebkitOverflowScrolling: 'touch', 
+				overscrollBehavior: 'contain',
+				position: 'relative',
+				willChange: 'transform',
+				touchAction: 'pan-y',
+				msOverflowStyle: 'none',
+				height: '100%',
+				maxHeight: '100%'
+			} as React.CSSProperties}
+		>
 			<AnimatePresence>
 				{messages.map((message) => (
 					<MessageBubble key={message.id} message={message} />

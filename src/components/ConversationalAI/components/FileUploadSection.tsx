@@ -7,7 +7,7 @@ interface FileUploadSectionProps {
 
 const FileUploadSection: React.FC<FileUploadSectionProps> = ({ onUploadClick }) => {
 	return (
-		<div className="p-4 border-t border-gray-200 bg-blue-50">
+		<div className="p-4 border-t border-gray-200 bg-blue-50" style={{ flexShrink: 0 }}>
 			<div className="text-center">
 				<DocumentIcon className="w-12 h-12 text-blue-600 mx-auto mb-3" />
 				<p className="text-sm text-gray-700 mb-3">Upload your resume</p>

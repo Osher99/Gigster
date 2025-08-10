@@ -73,37 +73,81 @@ export const useConversationalAI = ({
 		inputRef.current?.focus()
 	}, [])
 
-	// Handle mobile viewport issues
+	// Prevent keyboard from moving content on Android
 	useEffect(() => {
-		// Set initial viewport height
-		const setViewportHeight = () => {
-			const vh = window.innerHeight * 0.01
-			document.documentElement.style.setProperty('--vh', `${vh}px`)
+		// Store original viewport height
+		const originalHeight = window.innerHeight
+		let isAndroid = false
+		
+		// Detect Android
+		if (navigator.userAgent.includes('Android')) {
+			isAndroid = true
+			document.body.classList.add('android-keyboard-open')
 		}
 		
-		setViewportHeight()
+		// Prevent body scroll when chat is open
+		document.body.style.overflow = 'hidden'
 		
-		// Prevent viewport resize on input focus for mobile
-		const handleFocus = (e: FocusEvent) => {
-			if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-				// On mobile, prevent the keyboard from pushing the viewport
-				if (window.innerWidth <= 768) {
-					// Maintain scroll position
-					const scrollY = window.scrollY
-					setTimeout(() => {
-						window.scrollTo(0, scrollY)
-					}, 0)
+		// Use ResizeObserver to detect viewport changes
+		const resizeObserver = new ResizeObserver((entries) => {
+			if (isAndroid) {
+				// On Android, prevent any viewport changes from affecting the chat
+				window.scrollTo(0, 0)
+				
+				// Force the chat container to stay in place
+				const chatContainer = document.querySelector('.conversational-ai-container')
+				if (chatContainer) {
+					(chatContainer as HTMLElement).style.transform = 'translate3d(0, 0, 0)'
 				}
+			}
+		})
+		
+		// Observe body for size changes
+		resizeObserver.observe(document.body)
+		
+		// Visual Viewport API for mobile keyboards (Android specific)
+		if ('visualViewport' in window && isAndroid) {
+			const handleViewport = () => {
+				// Calculate keyboard height
+				const keyboardHeight = originalHeight - (window.visualViewport?.height || originalHeight)
+				
+				// Update CSS variable for keyboard height
+				document.documentElement.style.setProperty('--keyboard-height', `${keyboardHeight}px`)
+				
+				// Prevent scrolling and lock position
+				window.scrollTo(0, 0)
+				
+				// Force chat container to stay in place
+				const chatContainer = document.querySelector('.conversational-ai-container')
+				if (chatContainer) {
+					(chatContainer as HTMLElement).style.transform = 'translate3d(0, 0, 0)'
+					;(chatContainer as HTMLElement).style.position = 'absolute'
+					;(chatContainer as HTMLElement).style.bottom = '0'
+				}
+			}
+			
+			window.visualViewport?.addEventListener('resize', handleViewport)
+			window.visualViewport?.addEventListener('scroll', handleViewport)
+			
+			return () => {
+				document.body.style.overflow = ''
+				document.body.classList.remove('android-keyboard-open')
+				resizeObserver.disconnect()
+				window.visualViewport?.removeEventListener('resize', handleViewport)
+				window.visualViewport?.removeEventListener('scroll', handleViewport)
 			}
 		}
 		
-		// Add event listeners
-		window.addEventListener('resize', setViewportHeight)
-		document.addEventListener('focusin', handleFocus, { passive: false })
+		// Focus input after animation completes
+		const focusTimeout = setTimeout(() => {
+			inputRef.current?.focus({ preventScroll: true })
+		}, 300)
 		
 		return () => {
-			window.removeEventListener('resize', setViewportHeight)
-			document.removeEventListener('focusin', handleFocus)
+			document.body.style.overflow = ''
+			document.body.classList.remove('android-keyboard-open')
+			resizeObserver.disconnect()
+			clearTimeout(focusTimeout)
 		}
 	}, [])
 
